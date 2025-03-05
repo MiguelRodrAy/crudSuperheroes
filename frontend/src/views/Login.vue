@@ -37,7 +37,7 @@
   
   <script setup lang="ts">
   import { ref } from 'vue';
-  import { login, setToken } from '../api/api.ts';
+  import { login, setToken, setUsername } from '../api/api.ts';
   import { useRouter } from 'vue-router';
   
   const username = ref('');
@@ -48,6 +48,7 @@
     try {
       const response = await login(username.value, password.value);
       setToken(response.token);
+      setUsername(response.username);
       router.push('/menu');
       console.log('Login successful', response);
     } catch (error) {

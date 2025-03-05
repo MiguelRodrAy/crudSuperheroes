@@ -21,4 +21,5 @@ urlpatterns = [
     path('leagues/<int:id>/', views.leaguesApi),
 
     path('superhero/SaveFile', views.SaveFile),
+    path('media/images/<str:image_name>/', views.serve_image, name='serve_image')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

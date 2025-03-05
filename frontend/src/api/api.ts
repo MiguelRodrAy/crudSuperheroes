@@ -1,10 +1,11 @@
 import axios from 'axios';
-import type { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios';
 
 const API_URL = 'http://127.0.0.1:8000/';
 
 interface LoginResponse {
   token: string;
+  username: string;
 }
 
 interface RegisterResponse {
@@ -24,7 +25,7 @@ export const login = async (username: string, password: string): Promise<LoginRe
     const response: AxiosResponse<LoginResponse> = await api.post('login/', { username, password });
     return response.data;
   } catch (error) {
-    console.error("Login error", error);
+    console.error('Login error', error);
     throw error;
   }
 };
@@ -34,7 +35,7 @@ export const register = async (username: string, password: string, email: string
     const response: AxiosResponse<RegisterResponse> = await api.post('register/', { username, password, email });
     return response.data;
   } catch (error) {
-    console.error("Register error", error);
+    console.error('Register error', error);
     throw error;
   }
 };
@@ -48,5 +49,17 @@ export const setToken = (token: string): void => {
 };
 
 export const removeToken = (): void => {
-    localStorage.removeItem('token');
-  };
+  localStorage.removeItem('token');
+};
+
+export const setUsername = (username: string): void => {
+  localStorage.setItem('username', username);
+};
+
+export const getUsername = (): string | null => {
+  return localStorage.getItem('username');
+};
+
+export const removeUsername = (): void => {
+  localStorage.removeItem('username');
+};

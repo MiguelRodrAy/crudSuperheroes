@@ -12,17 +12,27 @@ from django.views.decorators.csrf import csrf_exempt
 # LOGIN
 @api_view(['POST'])
 def loginApi(request):
-    username = request.data.get('username')
+    identifier = request.data.get('username')
     password = request.data.get('password')
 
-    user = authenticate(username=username, password=password)
+    user = authenticate(username=identifier, password=password)
+
+    if user is None:
+        try:
+            user_obj = User.objects.get(email=identifier)
+            user = authenticate(username=user_obj.username, password=password)
+        except User.DoesNotExist:
+            pass
 
     if user:
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'message': 'Login succesful','token': token.key})
+        return Response({
+            'message': 'Login successful',
+            'token': token.key,
+            'username': user.username
+        })
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 # REGISTER

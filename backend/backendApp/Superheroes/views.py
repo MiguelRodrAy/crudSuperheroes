@@ -1,3 +1,6 @@
+import os
+from django.conf import settings
+from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
@@ -166,3 +169,12 @@ def SaveFile(request):
     file = request.FILES['file']
     file_name = default_storage.save(file.name, file)
     return JsonResponse(file_name, safe=False)
+
+@csrf_exempt
+def serve_image(image_name):
+    image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_name)
+
+    if os.path.exists(image_path):
+        return FileResponse(open(image_path, 'rb'), content_type='image/png')
+    else:
+        return JsonResponse({"error": "Image not found"}, status=404)

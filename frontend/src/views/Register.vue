@@ -63,7 +63,7 @@
     try {
       const response = await register(username.value, password.value, email.value);
       setToken(response.token);
-      router.push('/menu'); 
+      router.push('/login'); 
       console.log('Registration successful', response);
     } catch (error) {
       console.error('Registration failed', error);
